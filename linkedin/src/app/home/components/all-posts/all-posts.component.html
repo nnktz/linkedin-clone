@@ -1,0 +1,62 @@
+<div class="all-posts-container">
+  <ion-content>
+    <ion-list>
+      <ion-card *ngFor="let post of allLoadedPosts">
+        <ion-grid>
+          <ion-row class="ion-align-items-center ion-justify-content-center">
+            <ion-col class="ion-padding" size="auto">
+              <ion-avatar>
+                <ion-img src="../../../../assets/imgs/avt.jpg"></ion-img>
+              </ion-avatar>
+            </ion-col>
+
+            <ion-col>
+              <div class="full-name">Et O Et</div>
+              <div class="role">Full-stack Developer</div>
+              <div class="meta-data">
+                1d<ion-icon name="ellipse"></ion-icon> Edited
+                <ion-icon name="ellipse"></ion-icon>
+                <ion-icon name="globe-outline" color="dark"></ion-icon>
+              </div>
+            </ion-col>
+          </ion-row>
+
+          <p class="post-body">
+            {{ post.body }}
+          </p>
+
+          <ion-row>
+            <ion-button color="medium" fill="clear">
+              <ion-icon name="thumbs-up-outline"></ion-icon>
+              <ion-text>Like</ion-text>
+            </ion-button>
+
+            <ion-button color="medium" fill="clear">
+              <ion-icon name="chatbox-ellipses-outline"></ion-icon>
+              <ion-text>Comment</ion-text>
+            </ion-button>
+
+            <ion-button color="medium" fill="clear">
+              <ion-icon name="arrow-redo-outline"></ion-icon>
+              <ion-text>Share</ion-text>
+            </ion-button>
+
+            <ion-button color="medium" fill="clear">
+              <ion-icon name="paper-plane-outline"></ion-icon>
+              <ion-text>Send</ion-text>
+            </ion-button>
+          </ion-row>
+        </ion-grid>
+      </ion-card>
+    </ion-list>
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="Loading more data..."
+      ></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ion-content>
+
+  <div class="hide-scroll"></div>
+</div>

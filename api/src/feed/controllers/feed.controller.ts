@@ -7,11 +7,12 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 
 import { FeedService } from '../services/feed.service';
-import { FeedPost } from '../models/post.inteface';
+import { FeedPost } from '../models/post.interface';
 
 @Controller('feed')
 export class FeedController {
@@ -22,9 +23,18 @@ export class FeedController {
     return this.feedService.createPost(post);
   }
 
+  // @Get()
+  // findAll(): Observable<FeedPost[]> {
+  //   return this.feedService.findAllPosts();
+  // }
+
   @Get()
-  findAll(): Observable<FeedPost[]> {
-    return this.feedService.findAllPosts();
+  findSelected(
+    @Query('take') take: number = 1,
+    @Query('skip') skip: number = 1,
+  ): Observable<FeedPost[]> {
+    take = take > 20 ? 20 : take;
+    return this.feedService.findPosts(take, skip);
   }
 
   @Put(':id')

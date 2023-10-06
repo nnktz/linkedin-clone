@@ -4,7 +4,7 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
 import { FeedPostEntity } from '../models/post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FeedPost } from '../models/post.inteface';
+import { FeedPost } from '../models/post.interface';
 
 @Injectable()
 export class FeedService {
@@ -19,6 +19,14 @@ export class FeedService {
 
   findAllPosts(): Observable<FeedPost[]> {
     return from(this.feedPostRepository.find());
+  }
+
+  findPosts(take: number = 10, skip: number = 0): Observable<FeedPost[]> {
+    return from(
+      this.feedPostRepository.findAndCount({ take, skip }).then(([posts]) => {
+        return <FeedPost[]>posts;
+      }),
+    );
   }
 
   updatePost(id: number, feedPost: FeedPost): Observable<UpdateResult> {
