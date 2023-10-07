@@ -8,19 +8,23 @@ import {
   Post,
   Put,
   Query,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 
 import { FeedService } from '../services/feed.service';
 import { FeedPost } from '../models/post.interface';
+import { JwtGuard } from 'src/auth/guards/jwt.guard';
 
 @Controller('feed')
 export class FeedController {
   constructor(private feedService: FeedService) {}
 
+  @UseGuards(JwtGuard)
   @Post()
-  create(@Body() post: FeedPost): Observable<FeedPost> {
-    return this.feedService.createPost(post);
+  create(@Body() feedPost: FeedPost, @Request() req): Observable<FeedPost> {
+    return this.feedService.createPost(req.user, feedPost);
   }
 
   // @Get()
@@ -40,9 +44,9 @@ export class FeedController {
   @Put(':id')
   update(
     @Param('id') id: number,
-    @Body() feetPost: FeedPost,
+    @Body() feedPost: FeedPost,
   ): Observable<UpdateResult> {
-    return this.feedService.updatePost(id, feetPost);
+    return this.feedService.updatePost(id, feedPost);
   }
 
   @Delete(':id')
