@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Role } from '../models/role.enum';
 import { ROLE_KEY } from '../decorators/roles.decorator';
+import { User } from '../models/user.interface';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -21,8 +22,8 @@ export class RolesGuard implements CanActivate {
       return true;
     }
 
-    const { user } = context.switchToHttp().getRequest();
+    const { user }: { user: User } = context.switchToHttp().getRequest();
 
-    return requiredRoles.some((role) => user.role?.include(role));
+    return requiredRoles.some((role) => user.role?.includes(role));
   }
 }
