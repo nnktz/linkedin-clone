@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { AuthService } from 'src/app/auth/services/auth.service';
 
@@ -7,12 +8,24 @@ import { AuthService } from 'src/app/auth/services/auth.service';
   templateUrl: './popover.component.html',
   styleUrls: ['./popover.component.scss'],
 })
-export class PopoverComponent implements OnInit {
+export class PopoverComponent implements OnInit, OnDestroy {
   constructor(private authService: AuthService) {}
 
-  ngOnInit() {}
+  userFullImagePath!: string;
+  private userImagePathSubscription!: Subscription;
+
+  ngOnInit() {
+    this.userImagePathSubscription =
+      this.authService.userFullImagePath.subscribe((fullImagePath: string) => {
+        this.userFullImagePath = fullImagePath;
+      });
+  }
 
   onSignOut() {
     this.authService.logout();
+  }
+
+  ngOnDestroy(): void {
+    this.userImagePathSubscription.unsubscribe();
   }
 }

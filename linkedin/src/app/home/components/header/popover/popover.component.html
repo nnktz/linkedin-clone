@@ -4,7 +4,10 @@
       <ion-row class="ion-align-items-center ion-justify-content-center">
         <ion-col size="auto">
           <ion-avatar>
-            <ion-img src="../../../../../assets//imgs/avt.jpg"></ion-img>
+            <ion-img
+              *ngIf="userFullImagePath"
+              [src]="userFullImagePath"
+            ></ion-img>
           </ion-avatar>
         </ion-col>
 
