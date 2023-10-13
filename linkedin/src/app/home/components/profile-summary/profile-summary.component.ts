@@ -6,16 +6,11 @@ import { switchMap, take } from 'rxjs/operators';
 
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Role } from 'src/app/auth/models/user.model';
+import { BannerColorService } from '../../services/banner-color.service';
 // import { FileTypeResult, fileTypeFromBuffer } from 'file-type';
 
 type validFileExtension = 'png' | 'jpg' | 'jpeg';
 type validMimeType = 'image/png' | 'image/jpg' | 'image/jpeg';
-
-type BannerColors = {
-  colorOne: string;
-  colorTwo: string;
-  colorThree: string;
-};
 
 @Component({
   selector: 'app-profile-summary',
@@ -34,13 +29,10 @@ export class ProfileSummaryComponent implements OnInit, OnDestroy {
   fullName$ = new BehaviorSubject<string | null>(null);
   fullName = '';
 
-  bannerColors: BannerColors = {
-    colorOne: '#ab04b7',
-    colorTwo: '#dbe7e9',
-    colorThree: '#bfd3d6',
-  };
-
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    public bannerColorService: BannerColorService
+  ) {}
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -51,7 +43,8 @@ export class ProfileSummaryComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe((role: Role | undefined) => {
         if (role !== undefined) {
-          this.bannerColors = this.getBannerColors(role);
+          this.bannerColorService.bannerColors =
+            this.bannerColorService.getBannerColors(role);
         } else {
           // Handle the case when the role is undefined, if needed.
         }
@@ -68,27 +61,6 @@ export class ProfileSummaryComponent implements OnInit, OnDestroy {
       this.authService.userFullImagePath.subscribe((fullImagePath: string) => {
         this.userFullImagePath = fullImagePath;
       });
-  }
-
-  private getBannerColors(role: Role): BannerColors {
-    switch (role) {
-      case 'admin':
-        return {
-          colorOne: '#daa520',
-          colorTwo: '#f0e68c',
-          colorThree: '#fafad2',
-        };
-
-      case 'premium':
-        return {
-          colorOne: '#bc8f8f',
-          colorTwo: '#c09999',
-          colorThree: '#ddadaf',
-        };
-
-      default:
-        return this.bannerColors;
-    }
   }
 
   // onFileSelect(e: Event): void {

@@ -30,7 +30,7 @@ export class IsCreatorGuard implements CanActivate {
     const userId = user.id;
     const feedId = params.id;
 
-    return this.userService.findUseById(userId).pipe(
+    return this.userService.findUserById(userId).pipe(
       switchMap((user: User) =>
         this.feedService.findPostById(feedId).pipe(
           map((feedPost: FeedPost) => {
