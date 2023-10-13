@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable, map, switchMap } from 'rxjs';
 
 import { FeedService } from '../services/feed.service';
-import { User } from 'src/auth/models/user.interface';
+import { User } from 'src/auth/models/user.class';
 import { FeedPost } from '../models/post.interface';
 import { UserService } from 'src/auth/services/user.service';
 

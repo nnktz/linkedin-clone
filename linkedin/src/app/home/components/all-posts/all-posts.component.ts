@@ -89,8 +89,9 @@ export class AllPostsComponent implements OnInit, OnDestroy {
     }
 
     this.queryParams = `?take=${this.numberOfPosts}&skip=${this.skipPosts}`;
-    this.postService.getSelectedPosts(this.queryParams).subscribe(
-      (posts: Post[]) => {
+    this.postService
+      .getSelectedPosts(this.queryParams)
+      .subscribe((posts: Post[]) => {
         for (let postIndex = 0; postIndex < posts.length; postIndex++) {
           const doesAuthorHaveImage = !!posts[postIndex].author.imagePath;
           let fullImagePath = this.authService.getDefaultFullImagePath();
@@ -111,11 +112,7 @@ export class AllPostsComponent implements OnInit, OnDestroy {
         }
 
         this.skipPosts = this.skipPosts + 5;
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+      });
   }
 
   loadData(event: any) {
