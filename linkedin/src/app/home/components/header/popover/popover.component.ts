@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { PopoverController } from '@ionic/angular';
 import { BehaviorSubject, Subscription, take } from 'rxjs';
 
 import { AuthService } from 'src/app/auth/services/auth.service';
@@ -9,7 +10,10 @@ import { AuthService } from 'src/app/auth/services/auth.service';
   styleUrls: ['./popover.component.scss'],
 })
 export class PopoverComponent implements OnInit, OnDestroy {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private popoverController: PopoverController
+  ) {}
 
   userFullImagePath!: string;
   private userImagePathSubscription!: Subscription;
@@ -31,7 +35,8 @@ export class PopoverComponent implements OnInit, OnDestroy {
       });
   }
 
-  onSignOut() {
+  async onSignOut() {
+    await this.popoverController.dismiss();
     this.authService.logout();
   }
 
