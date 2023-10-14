@@ -2,7 +2,7 @@
   <ion-toolbar>
     <div class="toolbar-wrapper">
       <ion-buttons slot="start" class="ion-no-padding">
-        <ion-button>
+        <ion-button [routerLink]="['/home']">
           <ion-icon
             class="linkedin-logo"
             name="logo-linkedin"
@@ -18,7 +18,12 @@
 
       <ion-grid>
         <ion-row class="ion-justify-content-end">
-          <ion-col class="ion-hide-md-down" size="auto">
+          <ion-col
+            [routerLink]="['/home']"
+            style="cursor: pointer"
+            class="ion-hide-md-down"
+            size="auto"
+          >
             <ion-icon name="home"></ion-icon>
             <div>Home</div>
           </ion-col>
@@ -51,7 +56,12 @@
             <ion-icon name="briefcase"></ion-icon>
             <div>Jobs</div>
           </ion-col>
-          <ion-col class="ion-hide-md-down" size="auto">
+          <ion-col
+            [routerLink]="['/home/chat/connections']"
+            style="cursor: pointer"
+            class="ion-hide-md-down"
+            size="auto"
+          >
             <ion-icon name="chatbox-ellipses"></ion-icon>
             <div>Massaging</div>
           </ion-col>
@@ -76,6 +86,7 @@
             class="popover-menu"
             (click)="presentPopover($event)"
             size="auto"
+            style="cursor: pointer"
           >
             <ion-avatar>
               <ion-img
