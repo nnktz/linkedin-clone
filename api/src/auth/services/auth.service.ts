@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { Observable, from, map, switchMap } from 'rxjs';
+import { Observable, from, map, of, switchMap, tap } from 'rxjs';
 import { Repository } from 'typeorm';
 
 import * as bcrypt from 'bcrypt';
@@ -21,22 +21,42 @@ export class AuthService {
     return from(bcrypt.hash(password, 12));
   }
 
+  doesUserExist(email: string): Observable<boolean> {
+    return from(this.userRepository.findOne({ where: { email } })).pipe(
+      switchMap((user: User) => {
+        return of(!!user);
+      }),
+    );
+  }
+
   registerAccount(user: User): Observable<User> {
     const { firstName, lastName, email, password } = user;
 
-    return this.hashPassword(password).pipe(
-      switchMap((hashedPassword: string) => {
-        return from(
-          this.userRepository.save({
-            firstName,
-            lastName,
-            email,
-            password: hashedPassword,
-          }),
-        ).pipe(
-          map((user: User) => {
-            delete user.password;
-            return user;
+    return this.doesUserExist(email).pipe(
+      tap((doesUserExist: boolean) => {
+        if (doesUserExist) {
+          throw new HttpException(
+            'A user has already been created with this email address.',
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+      }),
+      switchMap(() => {
+        return this.hashPassword(password).pipe(
+          switchMap((hashedPassword: string) => {
+            return from(
+              this.userRepository.save({
+                firstName,
+                lastName,
+                email,
+                password: hashedPassword,
+              }),
+            ).pipe(
+              map((user: User) => {
+                delete user.password;
+                return user;
+              }),
+            );
           }),
         );
       }),
@@ -52,11 +72,10 @@ export class AuthService {
     ).pipe(
       switchMap((user: User) => {
         if (!user) {
-          // throw new HttpException('Not found', HttpStatus.NOT_FOUND)
-          // throw new HttpException(
-          //   { status: HttpStatus.NOT_FOUND, error: 'Invalid credentials' },
-          //   HttpStatus.NOT_FOUND,
-          // );
+          throw new HttpException(
+            { status: HttpStatus.FORBIDDEN, error: 'Invalid credentials' },
+            HttpStatus.FORBIDDEN,
+          );
         }
 
         return from(bcrypt.compare(password, user.password)).pipe(
