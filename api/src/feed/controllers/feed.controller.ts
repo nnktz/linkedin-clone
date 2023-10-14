@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
 
 import { FeedService } from '../services/feed.service';
 import { FeedPost } from '../models/post.interface';
-import { JwtGuard } from 'src/auth/guards/jwt.guard';
+import { JwtGuard } from '../../auth/guards/jwt.guard';
 // import { Roles } from 'src/auth/decorators/roles.decorator';
 // import { Role } from 'src/auth/models/role.enum';
 // import { RolesGuard } from 'src/auth/guards/roles.guard';
