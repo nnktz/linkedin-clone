@@ -29,15 +29,18 @@ export class PopoverComponent implements OnInit, OnDestroy {
 
     this.authService.userFullName
       .pipe(take(1))
-      .subscribe((fullName: string) => {
-        this.fullName = fullName;
-        this.fullName$.next(fullName);
+      .subscribe((fullName: string | null) => {
+        if (fullName !== null) {
+          this.fullName = fullName;
+          this.fullName$.next(fullName);
+        }
       });
   }
 
   async onSignOut() {
     await this.popoverController.dismiss();
     this.authService.logout();
+    location.reload();
   }
 
   ngOnDestroy(): void {

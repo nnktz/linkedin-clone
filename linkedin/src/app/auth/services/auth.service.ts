@@ -60,10 +60,13 @@ export class AuthService {
     );
   }
 
-  get userFullName(): Observable<string> {
+  get userFullName(): Observable<string | null> {
     return this.user$.asObservable().pipe(
       switchMap((user: User | null) => {
-        const fullName = user?.firstName + ' ' + user?.lastName;
+        if (!user) {
+          return of(null);
+        }
+        const fullName = user.firstName + ' ' + user.lastName;
         return of(fullName);
       })
     );

@@ -13,7 +13,7 @@ type BannerColors = {
 })
 export class BannerColorService {
   bannerColors: BannerColors = {
-    colorOne: '#ab04b7',
+    colorOne: '#a0b4b7',
     colorTwo: '#dbe7e9',
     colorThree: '#bfd3d6',
   };
